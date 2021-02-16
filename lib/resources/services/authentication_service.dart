@@ -10,7 +10,7 @@ class AuthenticationService {
   }
 
   Future<User> signInWithEmailAndPassword(String email, String password) async {
-    if (email == null || password == null) return null;
+    if (email == null || password == null || email == "" || password == "") return null;
     // TODO: validate login
     var user = User(email: email);
     currentUser = user;

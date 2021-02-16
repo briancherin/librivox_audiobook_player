@@ -1,7 +1,8 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication%20state.dart';
+import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_state.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_event.dart';
+import 'package:librivox_audiobook_player/resources/models/models.dart';
 import 'package:librivox_audiobook_player/resources/services/authentication_service.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -36,12 +37,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       final currentUser = await _authenticationService.getCurrentUser();
 
-      if (currentUser != null) {
+      yield AuthenticationAuthenticated(user: User(email: "TESTUSEREMAIL"));
+
+      /*if (currentUser != null) {
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
         yield AuthenticationNotAuthenticated();
       }
-
+*/
     } catch (e) {
       yield AuthenticationFailure(message: e.message ?? 'Unknown error occurred.');
     }

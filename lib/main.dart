@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librivox_audiobook_player/pages/home_screen.dart';
-import 'package:librivox_audiobook_player/pages/login/login_screen.dart';
-import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication%20state.dart';
+import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_bloc.dart';
+import 'package:librivox_audiobook_player/screens/catalog/catalog.dart';
+import 'package:librivox_audiobook_player/screens/login/login.dart';
+import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_state.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_bloc.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_event.dart';
 
 import 'resources/services/services.dart';
+import 'screens/catalog/blocs/catalog_event.dart';
 
 void main() {
   runApp(
@@ -35,7 +37,12 @@ class MyApp extends StatelessWidget {
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if(state is AuthenticationAuthenticated) {
-            return HomeScreen(user: state.user);
+            return BlocProvider<CatalogBloc>(
+              create: (context) {
+                return CatalogBloc()..add(CatalogOpened());
+              },
+              child: CatalogScreen()
+            );
           }
           return LoginScreen();
         }

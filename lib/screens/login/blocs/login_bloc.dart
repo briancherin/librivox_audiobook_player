@@ -1,7 +1,7 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:librivox_audiobook_player/pages/login/bloc/login_event.dart';
-import 'package:librivox_audiobook_player/pages/login/bloc/login_state.dart';
+import 'package:librivox_audiobook_player/screens/login/blocs/login_event.dart';
+import 'package:librivox_audiobook_player/screens/login/blocs/login_state.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_bloc.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_event.dart';
 import 'package:librivox_audiobook_player/resources/services/authentication_service.dart';

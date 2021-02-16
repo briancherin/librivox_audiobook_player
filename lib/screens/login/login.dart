@@ -2,13 +2,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:librivox_audiobook_player/pages/login/bloc/login_event.dart';
-import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication%20state.dart';
+import 'package:librivox_audiobook_player/screens/login/blocs/login_event.dart';
+import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_state.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_bloc.dart';
 import 'package:librivox_audiobook_player/resources/services/services.dart';
 
-import 'bloc/login_bloc.dart';
-import 'bloc/login_state.dart';
+import 'blocs/login_bloc.dart';
+import 'blocs/login_state.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
