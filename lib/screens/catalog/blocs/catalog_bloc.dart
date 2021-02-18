@@ -1,12 +1,17 @@
 
 import 'package:bloc/bloc.dart';
+import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_event.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
+  final AudiobookRepository _audiobookRepository;
 
-  CatalogBloc() : super(CatalogInitial());
+  CatalogBloc(AudiobookRepository audiobookRepository) :
+      assert(audiobookRepository != null),
+      _audiobookRepository = audiobookRepository,
+      super(CatalogInitial());
 
   @override
   Stream<CatalogState> mapEventToState(CatalogEvent event) async* {
@@ -24,11 +29,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     yield CatalogLoading();
     // Fetch audiobooks
     //TODO: Get actual data
-    List<Audiobook> audiobooks = [
-      Audiobook(title: "title1"),
-      Audiobook(title: "title2"),
-      Audiobook(title: "title3")
-    ];
+    List<Audiobook> audiobooks = await _audiobookRepository.fetchAudiobooks();
+
     yield CatalogLoaded(audiobooks: audiobooks);
   }
 /*

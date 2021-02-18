@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_bloc.dart';
 import 'package:librivox_audiobook_player/screens/catalog/catalog.dart';
 import 'package:librivox_audiobook_player/screens/login/login.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
           if(state is AuthenticationAuthenticated) {
             return BlocProvider<CatalogBloc>(
               create: (context) {
-                return CatalogBloc()..add(CatalogOpened());
+                final AudiobookRepository audiobookRepository = AudiobookRepository();
+                return CatalogBloc(audiobookRepository)..add(CatalogOpened());
               },
               child: CatalogScreen()
             );
