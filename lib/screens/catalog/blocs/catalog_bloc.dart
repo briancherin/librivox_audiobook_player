@@ -18,10 +18,6 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     if (event is CatalogOpened) {
       yield* _mapUserClickedAudiobookToState(event);
     }
-
-    /*if (event is UserClickedAudiobook) {
-      yield* _mapAudiobookClickedToState(event);
-    }*/
   }
 
   Stream<CatalogState> _mapUserClickedAudiobookToState(CatalogOpened event) async* {
@@ -33,9 +29,5 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
     yield CatalogLoaded(audiobooks: audiobooks);
   }
-/*
-  Stream<CatalogState> _mapAudiobookClickedToState(UserClickedAudiobook event) async* {
-    yield AudiobookClicked(audiobook: event.audiobook);
-  }*/
 
 }

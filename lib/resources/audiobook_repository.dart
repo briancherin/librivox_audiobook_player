@@ -2,7 +2,7 @@
 import 'package:librivox_audiobook_player/resources/librivox_audiobook_provider.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 
-/**
+/*
  * The repository collects different sources of information. So if we want to have
  * multiple different audiobook providers, we aggregate them here and return them
  * in one call.

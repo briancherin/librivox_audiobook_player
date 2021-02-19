@@ -8,9 +8,9 @@ class LibrivoxAudiobookProvider extends AudiobookProvider {
   Future<List<Audiobook>> fetchAudiobooks() {
     //TODO: Get actual data
     List<Audiobook> audiobooks = [
-      Audiobook(title: "title111"),
-      Audiobook(title: "title2"),
-      Audiobook(title: "title3")
+      Audiobook(title: "Book 1", numChapters: 5, author: "Billy Bob", duration: 3615),
+      Audiobook(title: "Book 2", numChapters: 5, author: "Bob Jones", duration: 27055),
+      Audiobook(title: "Book 3", numChapters: 5, author: "Jane Janeson", duration: 11887),
     ];
 
     return Future.value(audiobooks);

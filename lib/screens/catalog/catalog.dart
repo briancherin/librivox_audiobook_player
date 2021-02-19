@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/audiobook_info.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_bloc.dart';
-import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_event.dart';
 
 import 'blocs/catalog_state.dart';
 
