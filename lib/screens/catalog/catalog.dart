@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/audiobook_info.dart';
+import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
+import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_bloc.dart';
 
 import 'blocs/catalog_state.dart';
@@ -63,7 +65,16 @@ class CatalogScreen extends StatelessWidget {
 
   _openAudiobookInfoScreen(context, Audiobook audiobook) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AudiobookInfoScreen(audiobook: audiobook))
+      MaterialPageRoute(builder: (context) {
+
+        return BlocProvider<AudiobookInfoBloc>(
+          create: (context) {
+            return AudiobookInfoBloc()..add(AudiobookInfoOpened());
+          },
+          child: AudiobookInfoScreen(audiobook: audiobook)
+        );
+        // return AudiobookInfoScreen(audiobook: audiobook);
+      })
     );
   }
 
