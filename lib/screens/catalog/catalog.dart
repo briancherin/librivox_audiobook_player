@@ -27,15 +27,10 @@ class CatalogScreen extends StatelessWidget {
         minimum: const EdgeInsets.all(16),
         child: BlocListener<CatalogBloc, CatalogState>(
           listener: (context, state) {
-            if (state is AudiobookClicked) {
-              // TODO: launch audiobook info screen
-              Audiobook bookToOpen = state.audiobook;
-            }
+
           },
           child: BlocBuilder<CatalogBloc, CatalogState>(
             builder: (context, state) {
-              final catalogBloc = BlocProvider.of<CatalogBloc>(context);
-
               if (state is CatalogLoading || state is CatalogInitial) {
                 return Center(
                   child: CircularProgressIndicator(strokeWidth: 2)
@@ -63,7 +58,7 @@ class CatalogScreen extends StatelessWidget {
 
         return BlocProvider<AudiobookInfoBloc>(
           create: (context) {
-            return AudiobookInfoBloc()..add(AudiobookInfoOpened());
+            return AudiobookInfoBloc()..add(AudiobookInfoOpened(audiobook: audiobook));
           },
           child: AudiobookInfoScreen(audiobook: audiobook)
         );

@@ -8,12 +8,28 @@ abstract class AudiobookInfoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AudiobookInfoOpened extends AudiobookInfoEvent {}
+class AudiobookInfoOpened extends AudiobookInfoEvent {
+  final Audiobook audiobook;
+
+  AudiobookInfoOpened({@required this.audiobook});
+
+  @override
+  List<Object> get props => [audiobook];
+}
 
 class UserClickedPlay extends AudiobookInfoEvent {
   final Audiobook audiobook;
 
   UserClickedPlay({@required this.audiobook});
+
+  @override
+  List<Object> get props => [audiobook];
+}
+
+class UserClickedPause extends AudiobookInfoEvent {
+  final Audiobook audiobook;
+
+  UserClickedPause({@required this.audiobook});
 
   @override
   List<Object> get props => [audiobook];

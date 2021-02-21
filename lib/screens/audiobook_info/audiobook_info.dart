@@ -31,12 +31,19 @@ class AudiobookInfoScreen extends StatelessWidget {
                   SizedBox(height: 10),
                   Text(audiobook.numChapters.toString() + " chapters"),
                   Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
-                  ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<AudiobookInfoBloc>(context).add(UserClickedPlay(audiobook: audiobook));
-                      },
-                      child: Text(state is AudiobookPlaying ? "Pause" : "Play")
+                  SizedBox(height: 10),
+
+                  InkWell(
+                    child: Icon(state.audiobookIsPlaying ? Icons.pause : Icons.play_arrow, size: 50),
+                    onTap: () {
+                      BlocProvider.of<AudiobookInfoBloc>(context).add(
+                          state.audiobookIsPlaying
+                              ? UserClickedPause(audiobook: audiobook)
+                              : UserClickedPlay(audiobook: audiobook)
+                      );
+                    },
                   ),
+
                 ],
               )
             );
