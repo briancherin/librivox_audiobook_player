@@ -49,7 +49,6 @@ class AppScreen extends StatelessWidget {
   Scaffold buildScreen(context, int pageIndex, Widget body) {
     NavigationBloc _navigationBloc = BlocProvider.of<NavigationBloc>(context);
     return Scaffold(
-      appBar: AppBar(),
       body: body,
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: pageIndex,
