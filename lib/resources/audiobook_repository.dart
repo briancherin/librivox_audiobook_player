@@ -1,4 +1,5 @@
 
+import 'package:librivox_audiobook_player/resources/demo_audiobook_provider.dart';
 import 'package:librivox_audiobook_player/resources/librivox_audiobook_provider.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 
@@ -11,13 +12,15 @@ import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 
 class AudiobookRepository {
   final List<AudiobookProvider> _audiobookProviders = [
-    LibrivoxAudiobookProvider()
+    // LibrivoxAudiobookProvider(),
+    DemoAudiobookProvider(),
   ];
 
-  Future<List<Audiobook>> fetchAudiobooks() async {
+  Future<List<Audiobook>> fetchAudiobooks({int offset=0, int limit}) async {
+    print("AudiobookRepository. FetchAudiobooks offset=$offset, limit=$limit");
     List<Audiobook> list = [];
     for (var provider in _audiobookProviders) {
-      list.addAll(await provider.fetchAudiobooks());
+      list.addAll(await provider.fetchAudiobooks(offset: offset, limit: limit));
     }
     return list;
   }
@@ -25,5 +28,5 @@ class AudiobookRepository {
 }
 
 abstract class AudiobookProvider {
-  Future<List<Audiobook>> fetchAudiobooks();
+  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit});
 }

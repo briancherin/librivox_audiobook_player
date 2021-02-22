@@ -14,11 +14,12 @@ class CatalogLoading extends CatalogState {}
 
 class CatalogLoaded extends CatalogState {
   final List<Audiobook> audiobooks;
+  final bool allAudiobooksLoaded;
 
-  CatalogLoaded({@required this.audiobooks});
+  CatalogLoaded({@required this.audiobooks, @required this.allAudiobooksLoaded});
 
   @override
-  List<Object> get props => [audiobooks];
+  List<Object> get props => [audiobooks, allAudiobooksLoaded];
 }
 
 class AudiobookClicked extends CatalogState {

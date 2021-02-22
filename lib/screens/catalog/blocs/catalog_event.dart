@@ -10,12 +10,4 @@ abstract class CatalogEvent extends Equatable {
 
 class CatalogOpened extends CatalogEvent {}
 
-/*
-class UserClickedAudiobook extends CatalogEvent {
-  final Audiobook audiobook;
-
-  UserClickedAudiobook({@required this.audiobook});
-
-  @override
-  List<Object> get props => [audiobook];
-}*/
+class LoadMoreResults extends CatalogEvent {}

@@ -11,7 +11,7 @@ class LibrivoxAudiobookProvider extends AudiobookProvider {
   String getImageUrl (String identifier) => baseImageUrl + identifier;
 
   @override
-  Future<List<Audiobook>> fetchAudiobooks() {
+  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) {
     //TODO: Get actual data
     List<Audiobook> audiobooks = [
       LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", duration: 3615),
