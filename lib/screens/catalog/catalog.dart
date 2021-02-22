@@ -82,9 +82,12 @@ class CatalogScreen extends StatelessWidget {
             width: 150,
             margin: EdgeInsets.all(5),
             decoration: BoxDecoration(color: Colors.grey), // TODO: put cover image here
-            child: Center(
-                child: Text(audiobook.title)
-            ),
+            child: //Column(
+              //children: [
+                audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill) : SizedBox(height: 0),
+                //Text(audiobook.title)
+              //]
+            //),
           )
         );
       }).toList()

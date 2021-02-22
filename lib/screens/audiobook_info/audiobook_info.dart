@@ -24,7 +24,9 @@ class AudiobookInfoScreen extends StatelessWidget {
             return Center(
               child: Column(
                 children: [
-                  Container(height: 300, width: 300, decoration: BoxDecoration(color: Colors.grey),),
+                  Container(height: 300, width: 300, decoration: BoxDecoration(color: Colors.grey),
+                    child: audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill,) : SizedBox(height:0)
+                  ),
                   SizedBox(height: 30),
                   Text(audiobook.title, style: TextStyle(fontSize: 30),),
                   Text("by " + audiobook.author),
