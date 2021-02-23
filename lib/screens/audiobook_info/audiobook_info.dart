@@ -24,18 +24,28 @@ class AudiobookInfoScreen extends StatelessWidget {
             return Center(
               child: Column(
                 children: [
-                  Container(height: 300, width: 300, decoration: BoxDecoration(color: Colors.grey),
+                  Container(height: 200, width: 200, decoration: BoxDecoration(color: Colors.grey),
                     child: audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill,) : SizedBox(height:0)
                   ),
                   SizedBox(height: 30),
                   Text(audiobook.title, style: TextStyle(fontSize: 30),),
-                  Text("by " + audiobook.author),
+                  Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
                   SizedBox(height: 10),
                   Text(audiobook.numChapters.toString() + " chapters"),
                   Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
+                  /*Material(
+                    color: Colors.grey,
+                    shape: CircleBorder(),
+                    clipBehavior: Clip.hardEdge,
 
-                  InkWell(
+                  ),*/
+                  Container(
+                    height: 80,
+                      width: 80,
+                  child: Material(
+                      color: Colors.black12,
+                      child:InkWell(
                     child: Icon(state.audiobookIsPlaying ? Icons.pause : Icons.play_arrow, size: 50),
                     onTap: () {
                       BlocProvider.of<AudiobookInfoBloc>(context).add(
@@ -44,8 +54,8 @@ class AudiobookInfoScreen extends StatelessWidget {
                               : UserClickedPlay(audiobook: audiobook)
                       );
                     },
-                  ),
-
+                  )),
+                  )
                 ],
               )
             );
