@@ -13,14 +13,17 @@ import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_event.da
 
 import 'blocs/catalog_state.dart';
 
+// Infinite scrolling with guidance from https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67
+
 class CatalogScreen extends StatefulWidget {
+  static const GRID_CARD_WIDTH = 200;
+
   @override
   _CatalogScreenState createState() => _CatalogScreenState();
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
 
-  static const _GRID_CARD_WIDTH = 200;
   static const _SCROLL_THRESHOLD = 200.0;
 
   final _scrollController = ScrollController();
@@ -85,7 +88,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   _audiobookGrid(List<Audiobook> audiobooks, context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    int numColumns = screenWidth ~/ _GRID_CARD_WIDTH;
+    int numColumns = screenWidth ~/ CatalogScreen.GRID_CARD_WIDTH;
     return GridView.builder(
         itemCount: audiobooks.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

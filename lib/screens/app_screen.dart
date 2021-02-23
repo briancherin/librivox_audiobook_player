@@ -26,6 +26,9 @@ class AppScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, NavigationState state) {
+        double screenWidth = MediaQuery.of(context).size.width;
+        double screenHeight = MediaQuery.of(context).size.height;
+
         if (state is ShowLibrary) {
           return buildScreen(context, NavIndex.NAV_INDEX_LIBRARY, Text("Library"));
         }
@@ -34,7 +37,11 @@ class AppScreen extends StatelessWidget {
               BlocProvider<CatalogBloc>(
                   create: (context) {
                     final AudiobookRepository audiobookRepository = AudiobookRepository();
-                    return CatalogBloc(audiobookRepository)..add(CatalogOpened());
+
+                    // Determine the number of cards that can fit in the grid, according to the screen size.
+                    // This is needed so that the Catalog can initialize with the correct number of initial items.
+                    int initialGridSize = (screenWidth ~/ CatalogScreen.GRID_CARD_WIDTH) * ((screenHeight ~/ CatalogScreen.GRID_CARD_WIDTH) + 1);
+                    return CatalogBloc(audiobookRepository)..add(CatalogOpened(maxInitialItems: initialGridSize));
                   },
                   child: CatalogScreen()
               ));

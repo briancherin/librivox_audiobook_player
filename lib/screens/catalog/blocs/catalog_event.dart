@@ -8,6 +8,12 @@ abstract class CatalogEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CatalogOpened extends CatalogEvent {}
+class CatalogOpened extends CatalogEvent {
+  final int maxInitialItems;
+
+  CatalogOpened({@required this.maxInitialItems});
+
+  List<Object> get props => [maxInitialItems];
+}
 
 class LoadMoreResults extends CatalogEvent {}
