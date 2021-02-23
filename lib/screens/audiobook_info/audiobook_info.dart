@@ -58,8 +58,8 @@ class AudiobookInfoScreen extends StatelessWidget {
   String getTimestampFromSeconds(int totalSeconds) {
 
     int seconds = totalSeconds % 60;
-    int minutes = (((totalSeconds - seconds) / 60) as int) % 60;
-    int hours = (totalSeconds - seconds - (minutes * 60)) / 3600 as int;
+    int minutes = ((totalSeconds - seconds) ~/ 60) % 60;
+    int hours = (totalSeconds - seconds - (minutes * 60)) ~/ 3600;
 
     return "${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}";
   }

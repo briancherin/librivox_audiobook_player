@@ -16,7 +16,7 @@ import 'blocs/catalog_state.dart';
 // Infinite scrolling with guidance from https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67
 
 class CatalogScreen extends StatefulWidget {
-  static const GRID_CARD_WIDTH = 200;
+  static const GRID_CARD_WIDTH = 150;
 
   @override
   _CatalogScreenState createState() => _CatalogScreenState();
@@ -81,14 +81,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
   _openAudiobookInfoScreen(context, Audiobook audiobook) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-
         return BlocProvider<AudiobookInfoBloc>(
           create: (context) {
             return AudiobookInfoBloc()..add(AudiobookInfoOpened(audiobook: audiobook));
           },
           child: AudiobookInfoScreen(audiobook: audiobook)
         );
-        // return AudiobookInfoScreen(audiobook: audiobook);
       })
     );
   }
