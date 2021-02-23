@@ -29,18 +29,18 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     yield CatalogLoading();
     int numToLoad = event.maxInitialItems > DEFAULT_LOAD_LIMIT ? event.maxInitialItems : DEFAULT_LOAD_LIMIT;
     List<Audiobook> audiobooks = await _audiobookRepository.fetchAudiobooks(offset: 0, limit: numToLoad);
-    yield CatalogLoaded(audiobooks: audiobooks, allAudiobooksLoaded: false); // TODO: should probably consolidate both events into one (i.e. this false might be untrue)
+    yield CatalogState(audiobooks: audiobooks, allItemsLoaded: false, initialItemsLoaded: true, currState: CatalogLoaded()); // TODO: should probably consolidate both events into one (i.e. this false might be untrue)
   }
 
   Stream<CatalogState> _mapLoadMoreResultsToState(LoadMoreResults event) async* {
-    if (state is CatalogLoaded) {
-      CatalogLoaded currState = state as CatalogLoaded;
-      if (!currState.allAudiobooksLoaded) {
-        List<Audiobook> currAudiobooks = currState.audiobooks;
+    if (state.initialItemsLoaded) {
+      if (!state.allItemsLoaded) {
+        yield state.copyWith(currState: CatalogLoading());
+        List<Audiobook> currAudiobooks = state.audiobooks;
         List<Audiobook> moreAudiobooks = await _audiobookRepository
             .fetchAudiobooks(offset: currAudiobooks.length, limit: DEFAULT_LOAD_LIMIT);
-        yield CatalogLoaded(audiobooks: currAudiobooks + moreAudiobooks,
-            allAudiobooksLoaded: moreAudiobooks.length == 0);
+        yield state.copyWith(audiobooks: currAudiobooks + moreAudiobooks,
+            allItemsLoaded: moreAudiobooks.length == 0, currState: CatalogLoaded());
       }
     }
   }

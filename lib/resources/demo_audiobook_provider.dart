@@ -12,8 +12,8 @@ class DemoAudiobookProvider extends AudiobookProvider {
 
 
   @override
-  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) {
-    List<Audiobook> data = _data(100);
+  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) async {
+    List<Audiobook> data = _data(30);
     List<Audiobook> audiobooksToReturn = [];
     if (limit == null) limit = data.length;
     if (offset <= data.length) {
@@ -23,6 +23,7 @@ class DemoAudiobookProvider extends AudiobookProvider {
       audiobooksToReturn = data.sublist(offset, offset + limit);
      }
     }
+    await Future.delayed(Duration(seconds: 2));
     return Future.value(audiobooksToReturn);
   }
 

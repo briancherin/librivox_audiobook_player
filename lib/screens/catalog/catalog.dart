@@ -51,20 +51,27 @@ class _CatalogScreenState extends State<CatalogScreen> {
         minimum: const EdgeInsets.all(16),
         child:  BlocBuilder<CatalogBloc, CatalogState>(
             builder: (context, state) {
-              if (state is CatalogLoading || state is CatalogInitial) {
+              if (!state.initialItemsLoaded) {
                 return Center(
                   child: CircularProgressIndicator(strokeWidth: 2)
                 );
               }
-              if (state is CatalogLoaded) {
+              else {
                 return Center(
-                  child: _audiobookGrid(state.audiobooks, context)
-
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child:  Column(
+                      children: [
+                        _audiobookGrid(state.audiobooks, context),
+                        SizedBox(height: 5),
+                        // Spinner shows if the user scrolls to the bottom of the grid, and more items are loading
+                        state.currState is CatalogLoading ? CircularProgressIndicator(strokeWidth: 2) : SizedBox(height: 0),
+                        SizedBox(height: 5),
+                      ]
+                    )
+                  )
                 );
               }
-              return Center(
-                  child: CircularProgressIndicator(strokeWidth: 2)
-              );
             }
           )
       )
@@ -90,6 +97,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     int numColumns = screenWidth ~/ CatalogScreen.GRID_CARD_WIDTH;
     return GridView.builder(
+        // The GridView will be wrapped in a SingleChildScrollView to allow it to scroll.
+        // This is needed so that the spinner (when more items are loading) can be shown
+        // below the GridView (in a Column)
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+
         itemCount: audiobooks.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: numColumns
@@ -97,7 +110,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
         itemBuilder: (context, int index) {
           return _audiobookCard(context, audiobooks[index]);
         },
-        controller: _scrollController,
     );
   }
   
