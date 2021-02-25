@@ -2,6 +2,8 @@
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 
+import 'package:lipsum/lipsum.dart' as lipsum;
+
 class DemoAudiobookProvider extends AudiobookProvider {
 
 
@@ -23,17 +25,18 @@ class DemoAudiobookProvider extends AudiobookProvider {
       audiobooksToReturn = data.sublist(offset, offset + limit);
      }
     }
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(milliseconds: 0,));
     return Future.value(audiobooksToReturn);
   }
 
   List<Audiobook> _data(int size) {
-   List<Audiobook> d = [
-    LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", duration: 3615),
-    LibrivoxAudiobook(librivoxItemId: "secret_garden_librivox", coverImageUrl: getImageUrl("secret_garden_librivox"), title: "Book 2", numChapters: 5, author: "Bob Jones", duration: 27055),
-    LibrivoxAudiobook(librivoxItemId: "odyssey_butler_librivox", coverImageUrl: getImageUrl("odyssey_butler_librivox"), title: "Book 3", numChapters: 5, author: "Jane Janeson", duration: 11887),
+    var getDesc = () {return lipsum.createParagraph(numSentences: 10);};
+    List<Audiobook> d = [
+    LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", duration: 3615, description: getDesc()),
+    LibrivoxAudiobook(librivoxItemId: "secret_garden_librivox", coverImageUrl: getImageUrl("secret_garden_librivox"), title: "Book 2", numChapters: 5, author: "Bob Jones", duration: 27055, description: getDesc()),
+    LibrivoxAudiobook(librivoxItemId: "odyssey_butler_librivox", coverImageUrl: getImageUrl("odyssey_butler_librivox"), title: "Book 3", numChapters: 5, author: "Jane Janeson", duration: 11887, description: getDesc()),
     ];
-   return List<Audiobook>.generate(size, (i) => d[i % d.length]);
+    return List<Audiobook>.generate(size, (i) => d[i % d.length]);
  }
 
 }

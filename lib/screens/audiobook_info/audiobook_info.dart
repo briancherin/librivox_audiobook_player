@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librivox_audiobook_player/components/play_button.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
@@ -21,42 +22,39 @@ class AudiobookInfoScreen extends StatelessWidget {
         minimum: const EdgeInsets.all(16),
         child: BlocBuilder<AudiobookInfoBloc, AudiobookInfoState>(
           builder: (context, state) {
-            return Center(
-              child: Column(
-                children: [
-                  Container(height: 200, width: 200, decoration: BoxDecoration(color: Colors.grey),
-                    child: audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill,) : SizedBox(height:0)
-                  ),
-                  SizedBox(height: 30),
-                  Text(audiobook.title, style: TextStyle(fontSize: 30),),
-                  Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
-                  SizedBox(height: 10),
-                  Text(audiobook.numChapters.toString() + " chapters"),
-                  Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
-                  SizedBox(height: 20),
-                  /*Material(
-                    color: Colors.grey,
-                    shape: CircleBorder(),
-                    clipBehavior: Clip.hardEdge,
-
-                  ),*/
-                  Container(
-                    height: 80,
-                      width: 80,
-                  child: Material(
-                      color: Colors.black12,
-                      child:InkWell(
-                    child: Icon(state.audiobookIsPlaying ? Icons.pause : Icons.play_arrow, size: 50),
-                    onTap: () {
-                      BlocProvider.of<AudiobookInfoBloc>(context).add(
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(height: 200, width: 200, decoration: BoxDecoration(color: Colors.grey),
+                      child: audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill,) : SizedBox(height:0)
+                    ),
+                    SizedBox(height: 30),
+                    Text(audiobook.title, style: TextStyle(fontSize: 30),),
+                    Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
+                    SizedBox(height: 10),
+                    Text(audiobook.numChapters.toString() + " chapters"),
+                    Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
+                    SizedBox(height: 20),
+                    PlayButton(
+                      state: state.audiobookIsPlaying ? PlayButtonState.SHOW_PAUSE : PlayButtonState.SHOW_PLAY,
+                      onTap: () {
+                        BlocProvider.of<AudiobookInfoBloc>(context).add(
                           state.audiobookIsPlaying
-                              ? UserClickedPause(audiobook: audiobook)
-                              : UserClickedPlay(audiobook: audiobook)
-                      );
-                    },
-                  )),
-                  )
-                ],
+                            ? UserClickedPause(audiobook: audiobook)
+                            : UserClickedPlay(audiobook: audiobook)
+                        );
+                      }
+                    ),
+                    SizedBox(height: 25),
+                    Container(
+                      width: 400,
+                      child: Center(
+                        child: Text(audiobook.description, textAlign: TextAlign.center,),
+                      ),
+                    ),
+                  ],
+                )
               )
             );
           }
