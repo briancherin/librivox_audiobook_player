@@ -2,10 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librivox_audiobook_player/components/cover_image.dart';
 import 'package:librivox_audiobook_player/components/play_button.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
+import 'package:librivox_audiobook_player/screens/now_playing/now_playing.dart';
 
 import 'blocs/audiobook_info_state.dart';
 
@@ -26,9 +28,7 @@ class AudiobookInfoScreen extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Container(height: 200, width: 200, decoration: BoxDecoration(color: Colors.grey),
-                      child: audiobook.coverImageUrl != null ? Image.network(audiobook.coverImageUrl, fit: BoxFit.fill,) : SizedBox(height:0)
-                    ),
+                    CoverImage(audiobook: audiobook),
                     SizedBox(height: 30),
                     Text(audiobook.title, style: TextStyle(fontSize: 30),),
                     Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
@@ -37,13 +37,14 @@ class AudiobookInfoScreen extends StatelessWidget {
                     Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
                     SizedBox(height: 20),
                     PlayButton(
-                      state: state.audiobookIsPlaying ? PlayButtonState.SHOW_PAUSE : PlayButtonState.SHOW_PLAY,
+                      state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
                       onTap: () {
                         BlocProvider.of<AudiobookInfoBloc>(context).add(
                           state.audiobookIsPlaying
                             ? UserClickedPause(audiobook: audiobook)
                             : UserClickedPlay(audiobook: audiobook)
                         );
+                        _openNowPlayingScreen(context, audiobook);
                       }
                     ),
                     SizedBox(height: 25),
@@ -60,6 +61,14 @@ class AudiobookInfoScreen extends StatelessWidget {
           }
         )
       ),
+    );
+  }
+
+  void _openNowPlayingScreen(context, Audiobook audiobook) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return NowPlayingScreen(audiobook: audiobook);
+      })
     );
   }
 
