@@ -5,7 +5,7 @@ class Audiobook {
   final String title;
   final String author;
   final String description;
-  final int duration; // in seconds
+  final int durationSeconds; // in seconds
   final int numChapters;
   final String coverImageUrl; // TODO: Make a BookCoverImage object in case it is not a url but a local file
 
@@ -13,7 +13,7 @@ class Audiobook {
     @required this.title,
     @required this.author,
     @required this.description,
-    @required this.duration,
+    @required this.durationSeconds,
     @required this.numChapters,
     this.coverImageUrl,
   });
@@ -25,7 +25,7 @@ class LibrivoxAudiobook extends Audiobook {
   final String title;
   final String author;
   final String description;
-  final int duration;
+  final int durationSeconds;
   final int numChapters;
   final String coverImageUrl;
 
@@ -35,10 +35,10 @@ class LibrivoxAudiobook extends Audiobook {
     @required this.title,
     @required this.author,
     @required this.description,
-    @required this.duration,
+    @required this.durationSeconds,
     @required this.numChapters,
     this.coverImageUrl,
-  }) : super(title: title, author: author, description: description, duration: duration, numChapters: numChapters, coverImageUrl: coverImageUrl);
+  }) : super(title: title, author: author, description: description, durationSeconds: durationSeconds, numChapters: numChapters, coverImageUrl: coverImageUrl);
 
 
 }

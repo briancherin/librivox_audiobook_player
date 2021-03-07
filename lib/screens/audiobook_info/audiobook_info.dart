@@ -7,6 +7,8 @@ import 'package:librivox_audiobook_player/components/play_button.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
+import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_bloc.dart';
+import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/now_playing.dart';
 
 import 'blocs/audiobook_info_state.dart';
@@ -34,7 +36,7 @@ class AudiobookInfoScreen extends StatelessWidget {
                     Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
                     SizedBox(height: 10),
                     Text(audiobook.numChapters.toString() + " chapters"),
-                    Text("Duration: " + getTimestampFromSeconds(audiobook.duration)),
+                    Text("Duration: " + getTimestampFromSeconds(audiobook.durationSeconds)),
                     SizedBox(height: 20),
                     PlayButton(
                       state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
@@ -67,7 +69,12 @@ class AudiobookInfoScreen extends StatelessWidget {
   void _openNowPlayingScreen(context, Audiobook audiobook) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return NowPlayingScreen(audiobook: audiobook);
+        return BlocProvider<NowPlayingBloc>(
+          create: (context) {
+            return NowPlayingBloc()..add(UserOpenedNowPlaying(audiobook: audiobook));
+          },
+          child: NowPlayingScreen(),
+        );
       })
     );
   }
