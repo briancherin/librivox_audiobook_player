@@ -6,7 +6,7 @@ import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_s
 
 class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   NowPlayingBloc() :
-      super(NowPlayingState(currentState: NowPlayingState(currentState: NowPlayingInitial())));
+      super(NowPlayingState(currentState: NowPlayingInitial(), audiobookIsPlaying: true)); // TODO: Should audiobookIsPlaying always be true at start?
 
   @override
   Stream<NowPlayingState> mapEventToState(NowPlayingEvent event) async* {
@@ -24,6 +24,10 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
 
     if (event is UserReleasedPlaybackSlider) {
       yield* _mapUserReleasedPlaybackSliderToState(event);
+    }
+
+    if (event is NowPlayingUserClickedPlayButton) {
+      yield* _mapUserClickedPlayToState(event);
     }
   }
 
@@ -46,8 +50,13 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
 
   Stream<NowPlayingState> _mapUserReleasedPlaybackSliderToState(UserReleasedPlaybackSlider event) async* {
     // TODO: Start playing the audio at this position
+    // If currently paused, only set the new position (wait for the user to press play)
     print("USER RELEASED PLAYBACK SLIDER. PLAYING AUDIO AT POSITION: ${event.releasePosition}.");
 
+  }
+
+  Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
+    yield state.copyWith(audiobookIsPlaying: !state.audiobookIsPlaying);
   }
 
 

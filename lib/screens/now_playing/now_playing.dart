@@ -30,7 +30,12 @@ class NowPlayingScreen extends StatelessWidget {
                     child: Column(
                         children: [
                           CoverImage(audiobook: state.audiobook),
-                          PlayButton(state: PlayButtonState.PLAYING), // TODO: get from state (playing or paused)
+                          PlayButton(
+                            state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
+                            onTap: () {
+                              BlocProvider.of<NowPlayingBloc>(context).add(NowPlayingUserClickedPlayButton());
+                            },
+                          ),
                           _getAudioSlider(context, state.audiobook, state.currentPositionMillis),
                         ]
                     ),

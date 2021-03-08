@@ -36,3 +36,5 @@ class UserReleasedPlaybackSlider extends NowPlayingEvent {
 }
 
 class UserClickedPlaybackSlider extends NowPlayingEvent {}
+
+class NowPlayingUserClickedPlayButton extends NowPlayingEvent {}
