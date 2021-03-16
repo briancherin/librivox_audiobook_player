@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
+import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/audiobook_info.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
@@ -83,7 +84,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
       MaterialPageRoute(builder: (context) {
         return BlocProvider<AudiobookInfoBloc>(
           create: (context) {
-            return AudiobookInfoBloc()..add(AudiobookInfoOpened(audiobook: audiobook));
+            final audioPlayerService = RepositoryProvider.of<AudioPlayerService>(context);
+            return AudiobookInfoBloc(audioPlayerService: audioPlayerService)..add(AudiobookInfoOpened(audiobook: audiobook));
           },
           child: AudiobookInfoScreen(audiobook: audiobook)
         );

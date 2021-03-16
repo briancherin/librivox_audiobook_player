@@ -1,11 +1,15 @@
 
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_state.dart';
 
 class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
-  NowPlayingBloc() :
+  final AudioPlayerService audioPlayerService;
+
+  NowPlayingBloc({@required this.audioPlayerService}) :
       super(NowPlayingState(currentState: NowPlayingInitial(), audiobookIsPlaying: true)); // TODO: Should audiobookIsPlaying always be true at start?
 
   @override
@@ -56,6 +60,12 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
+
+    if(state.audiobookIsPlaying) {
+      // pause
+      audioPlayerService.pause();
+    }
+
     yield state.copyWith(audiobookIsPlaying: !state.audiobookIsPlaying);
   }
 

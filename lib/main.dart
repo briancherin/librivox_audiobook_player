@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 import 'package:librivox_audiobook_player/resources/blocs/navigation/navigation_bloc.dart';
+import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
 import 'package:librivox_audiobook_player/screens/app_screen.dart';
 import 'package:librivox_audiobook_player/screens/catalog/blocs/catalog_bloc.dart';
 import 'package:librivox_audiobook_player/screens/catalog/catalog.dart';
@@ -15,10 +16,16 @@ import 'screens/catalog/blocs/catalog_event.dart';
 
 void main() {
   runApp(
-    RepositoryProvider<AuthenticationService>(
-      create: (context) {
-        return AuthenticationService();
-      },
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthenticationService>(
+          create: (context) => AuthenticationService()
+        ),
+        RepositoryProvider<AudioPlayerService>(
+          create: (context) => AudioPlayerService()
+        )
+      ],
+
       child:
         BlocProvider<AuthenticationBloc>(
           create: (context) {
@@ -46,14 +53,6 @@ class MyApp extends StatelessWidget {
               },
               child: AppScreen()
             );
-            return AppScreen();
-            /*return BlocProvider<CatalogBloc>(
-              create: (context) {
-                final AudiobookRepository audiobookRepository = AudiobookRepository();
-                return CatalogBloc(audiobookRepository)..add(CatalogOpened());
-              },
-              child: CatalogScreen()
-            );*/
           }
           return LoginScreen();
         }
