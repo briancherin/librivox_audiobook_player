@@ -36,7 +36,7 @@ class AppScreen extends StatelessWidget {
           return buildScreen(context, NavIndex.NAV_INDEX_CATALOG,
               BlocProvider<CatalogBloc>(
                   create: (context) {
-                    final AudiobookRepository audiobookRepository = AudiobookRepository();
+                    final AudiobookRepository audiobookRepository = RepositoryProvider.of<AudiobookRepository>(context);
 
                     // Determine the number of cards that can fit in the grid, according to the screen size.
                     // This is needed so that the Catalog can initialize with the correct number of initial items.

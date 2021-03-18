@@ -1,8 +1,9 @@
 
-import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'models/models.dart';
 
 import 'package:lipsum/lipsum.dart' as lipsum;
+
 
 class DemoAudiobookProvider extends AudiobookProvider {
 
@@ -38,5 +39,15 @@ class DemoAudiobookProvider extends AudiobookProvider {
     ];
     return List<Audiobook>.generate(size, (i) => d[i % d.length]);
  }
+
+  @override
+  Future<List<Chapter>> fetchChapters({Audiobook audiobook}) {
+    List<Chapter> list = [
+      LibrivoxChapter(title: "Chapter 1", trackUrl: "https://archive.org/download/dracula_librivox/dracula_01_stoker.mp3"),
+      LibrivoxChapter(title: "Chapter 2", trackUrl: "https://archive.org/download/dracula_librivox/dracula_02_stoker.mp3"),
+      LibrivoxChapter(title: "Chapter 3", trackUrl: "https://archive.org/download/dracula_librivox/dracula_03_stoker.mp3"),
+    ];
+    return Future.value(list);
+  }
 
 }

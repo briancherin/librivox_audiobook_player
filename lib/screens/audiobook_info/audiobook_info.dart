@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:librivox_audiobook_player/components/cover_image.dart';
 import 'package:librivox_audiobook_player/components/play_button.dart';
+import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
+import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_bloc.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_bloc.dart';
@@ -80,8 +82,10 @@ class AudiobookInfoScreen extends StatelessWidget {
       MaterialPageRoute(builder: (context) {
         return BlocProvider<NowPlayingBloc>(
           create: (context) {
-            AudioPlayerService audioPlayerService = RepositoryProvider.of<AudioPlayerService>(context);
-            return NowPlayingBloc(audioPlayerService: audioPlayerService)..add(UserOpenedNowPlaying(audiobook: audiobook));
+            AudiobookPlaybackDelegator playbackDelegator = RepositoryProvider.of<AudiobookPlaybackDelegator>(context);
+            AudiobookRepository audiobookRepository = RepositoryProvider.of<AudiobookRepository>(context);
+            return NowPlayingBloc(playbackDelegator: playbackDelegator, audiobookRepository: audiobookRepository)
+              ..add(UserOpenedNowPlaying(audiobook: audiobook, shouldBeginPlayback: true));
           },
           child: NowPlayingScreen(),
         );

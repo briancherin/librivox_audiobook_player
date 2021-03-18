@@ -1,15 +1,18 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
+import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'package:librivox_audiobook_player/resources/models/models.dart';
+import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_state.dart';
 
 class AudiobookInfoBloc extends Bloc<AudiobookInfoEvent, AudiobookInfoState> {
 
-  final AudioPlayerService audioPlayerService;
+  final AudiobookPlaybackDelegator playbackDelegator;
+  final AudiobookRepository audiobookRepository;
 
-  AudiobookInfoBloc({@required this.audioPlayerService}):
+  AudiobookInfoBloc({@required this.playbackDelegator, @required this.audiobookRepository}):
     super(AudiobookInfoState(currentState: AudiobookInfoInitial()));
 
   @override
@@ -32,14 +35,14 @@ class AudiobookInfoBloc extends Bloc<AudiobookInfoEvent, AudiobookInfoState> {
   }
 
   Stream<AudiobookInfoState> _mapUserClickedPlayToState(UserClickedPlay event) async* {
-    // TODO: GET ACTUAL CORRECT URL TO PLAY FROM (FOR CORRECT CHAPTER IN BOOK)
-    String url = "https://archive.org/download/dracula_librivox/dracula_11_stoker.mp3";
-    audioPlayerService.play(url);
+    // TODO: need to do anything here? (e.g. resume playback) (currently, pressing the play button just launches the now playing screen)
+
     yield state.copyWith(audiobookIsPlaying: true);
+
   }
 
   Stream<AudiobookInfoState> _mapUserClickedPauseToState(UserClickedPause event) async* {
-    audioPlayerService.pause();
+    playbackDelegator.pauseAudiobook();
     yield state.copyWith(audiobookIsPlaying: false);
   }
 

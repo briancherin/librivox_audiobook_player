@@ -10,11 +10,12 @@ abstract class NowPlayingEvent extends Equatable {
 
 class UserOpenedNowPlaying extends NowPlayingEvent {
   final Audiobook audiobook; // The audiobook the user opened
+  final bool shouldBeginPlayback;
 
-  UserOpenedNowPlaying({@required this.audiobook});
+  UserOpenedNowPlaying({@required this.audiobook, this.shouldBeginPlayback = false});
 
   @override
-  List<Object> get props => [audiobook];
+  List<Object> get props => [audiobook, shouldBeginPlayback];
 }
 
 class UserMovedPlaybackSlider extends NowPlayingEvent {
@@ -38,3 +39,5 @@ class UserReleasedPlaybackSlider extends NowPlayingEvent {
 class UserClickedPlaybackSlider extends NowPlayingEvent {}
 
 class NowPlayingUserClickedPlayButton extends NowPlayingEvent {}
+
+class NowPlayingUserClickedPauseButton extends NowPlayingEvent {}

@@ -2,14 +2,17 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
+import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'package:librivox_audiobook_player/resources/models/models.dart';
+import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_state.dart';
 
 class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
-  final AudioPlayerService audioPlayerService;
+  final AudiobookPlaybackDelegator playbackDelegator;
+  final AudiobookRepository audiobookRepository;
 
-  NowPlayingBloc({@required this.audioPlayerService}) :
+  NowPlayingBloc({@required this.playbackDelegator, @required this.audiobookRepository}) :
       super(NowPlayingState(currentState: NowPlayingInitial(), audiobookIsPlaying: true)); // TODO: Should audiobookIsPlaying always be true at start?
 
   @override
@@ -33,6 +36,12 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     if (event is NowPlayingUserClickedPlayButton) {
       yield* _mapUserClickedPlayToState(event);
     }
+
+    if (event is NowPlayingUserClickedPauseButton) {
+      yield* _mapUserClickedPauseToState(event);
+    }
+
+
   }
 
   Stream<NowPlayingState> _mapUserOpenedNowPlayingToState(UserOpenedNowPlaying event) async* {
@@ -41,6 +50,10 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     // Also retrieve the current position in the audiobook and yield it in the initial state
     double currPosMillis = 0; // TODO: get actual current position in audiobook from storage
     yield state.copyWith(currentState: AudiobookUserDataLoaded(), audiobook: event.audiobook, currentPositionMillis: currPosMillis);
+
+    if (event.shouldBeginPlayback) {
+      add(NowPlayingUserClickedPlayButton());
+    }
   }
 
   Stream<NowPlayingState> _mapUserMovedPlaybackSliderToState(UserMovedPlaybackSlider event) async* {
@@ -60,13 +73,29 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
+      Audiobook audiobookWithChapters; // Either audiobook already has its chapters retrieved, or they will be retrieved
 
-    if(state.audiobookIsPlaying) {
-      // pause
-      audioPlayerService.pause();
-    }
+      // If this is the first time pressing play, load the list of chapters for the audiobook
+      if (state.audiobook is LibrivoxAudiobook && !state.chaptersLoaded) {
+        // Load chapters and track urls for this audiobook
+        List<LibrivoxChapter> chapters = (await audiobookRepository.fetchChapters(audiobook: state.audiobook)).cast<LibrivoxChapter>();
 
-    yield state.copyWith(audiobookIsPlaying: !state.audiobookIsPlaying);
+        // Set the chapters in the audiobook object and mark chapters as loaded
+        audiobookWithChapters = state.audiobook.withChapters(chapters);
+        yield state.copyWith(audiobook: audiobookWithChapters, chaptersLoaded: true);
+      } else {
+        audiobookWithChapters = state.audiobook;
+      }
+
+      // Start playback
+      playbackDelegator.playAudiobook(audiobook: audiobookWithChapters);
+
+      yield state.copyWith(audiobookIsPlaying: true);
+  }
+
+  Stream<NowPlayingState> _mapUserClickedPauseToState(NowPlayingUserClickedPauseButton event) async* {
+    playbackDelegator.pauseAudiobook();
+    yield state.copyWith(audiobookIsPlaying: false);
   }
 
 

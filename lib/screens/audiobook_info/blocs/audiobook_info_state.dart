@@ -7,14 +7,16 @@ class AudiobookInfoState extends Equatable {
   final Audiobook audiobook;
   final AudiobookInfoState currentState;
   final bool audiobookIsPlaying;
+  final bool chaptersLoaded;
 
-  AudiobookInfoState({this.audiobook, this.currentState, this.audiobookIsPlaying = false});
+  AudiobookInfoState({this.audiobook, this.currentState, this.audiobookIsPlaying = false, this.chaptersLoaded = false});
 
-  AudiobookInfoState copyWith({Audiobook audiobook, AudiobookInfoState currentState, bool audiobookIsPlaying}) {
+  AudiobookInfoState copyWith({Audiobook audiobook, AudiobookInfoState currentState, bool audiobookIsPlaying, bool chaptersLoaded}) {
     return AudiobookInfoState(
       audiobook: audiobook ?? this.audiobook,
       currentState: currentState ?? this.currentState,
-      audiobookIsPlaying: audiobookIsPlaying ?? this.audiobookIsPlaying
+      audiobookIsPlaying: audiobookIsPlaying ?? this.audiobookIsPlaying,
+      chaptersLoaded: chaptersLoaded ?? this.chaptersLoaded,
     );
   }
 
@@ -26,5 +28,3 @@ class AudiobookInfoState extends Equatable {
 class AudiobookInfoInitial extends AudiobookInfoState {}
 
 class AudiobookInfoLoaded extends AudiobookInfoState {}
-
-// class AudiobookPlaying extends AudiobookInfoState {}

@@ -11,6 +11,7 @@ import 'package:librivox_audiobook_player/resources/blocs/authentication/authent
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_bloc.dart';
 import 'package:librivox_audiobook_player/resources/blocs/authentication/authentication_event.dart';
 
+import 'resources/services/audiobook_playback_delegator.dart';
 import 'resources/services/services.dart';
 import 'screens/catalog/blocs/catalog_event.dart';
 
@@ -21,9 +22,18 @@ void main() {
         RepositoryProvider<AuthenticationService>(
           create: (context) => AuthenticationService()
         ),
+        RepositoryProvider<AudiobookRepository>(
+          create: (context) => AudiobookRepository()
+        ),
         RepositoryProvider<AudioPlayerService>(
           create: (context) => AudioPlayerService()
-        )
+        ),
+        RepositoryProvider<AudiobookPlaybackDelegator>(
+            create: (context) {
+              var audioPlayerService = RepositoryProvider.of<AudioPlayerService>(context);
+              return AudiobookPlaybackDelegator(audioPlayerService: audioPlayerService);
+            }
+        ),
       ],
 
       child:
