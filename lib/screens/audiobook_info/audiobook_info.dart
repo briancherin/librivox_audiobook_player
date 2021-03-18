@@ -15,9 +15,8 @@ import 'package:librivox_audiobook_player/screens/now_playing/now_playing.dart';
 import 'blocs/audiobook_info_state.dart';
 
 class AudiobookInfoScreen extends StatelessWidget {
-  final Audiobook audiobook;
 
-  const AudiobookInfoScreen({@required this.audiobook});
+  const AudiobookInfoScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -27,40 +26,49 @@ class AudiobookInfoScreen extends StatelessWidget {
         minimum: const EdgeInsets.all(16),
         child: BlocBuilder<AudiobookInfoBloc, AudiobookInfoState>(
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    CoverImage(audiobook: audiobook),
-                    SizedBox(height: 30),
-                    Text(audiobook.title, style: TextStyle(fontSize: 30),),
-                    Text("by " + audiobook.author, style: TextStyle(fontSize: 15)),
-                    SizedBox(height: 10),
-                    Text(audiobook.numChapters.toString() + " chapters"),
-                    Text("Duration: " + getTimestampFromSeconds(audiobook.durationSeconds)),
-                    SizedBox(height: 20),
-                    PlayButton(
-                      state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
-                      onTap: () {
-                        BlocProvider.of<AudiobookInfoBloc>(context).add(
-                          state.audiobookIsPlaying
-                            ? UserClickedPause(audiobook: audiobook)
-                            : UserClickedPlay(audiobook: audiobook)
-                        );
-                        _openNowPlayingScreen(context, audiobook);
-                      }
-                    ),
-                    SizedBox(height: 25),
-                    Container(
-                      width: 400,
-                      child: Center(
-                        child: Text(audiobook.description, textAlign: TextAlign.center,),
-                      ),
-                    ),
-                  ],
-                )
-              )
-            );
+            Audiobook audiobook = state.audiobook;
+            if (state.currentState is AudiobookInfoLoaded) {
+              return SingleChildScrollView(
+                  child: Center(
+                      child: Column(
+                        children: [
+                          CoverImage(audiobook: audiobook),
+                          SizedBox(height: 30),
+                          Text(
+                            audiobook.title, style: TextStyle(fontSize: 30),),
+                          Text("by " + audiobook.author,
+                              style: TextStyle(fontSize: 15)),
+                          SizedBox(height: 10),
+                          Text(audiobook.numChapters.toString() + " chapters"),
+                          Text("Duration: " + getTimestampFromSeconds(
+                              audiobook.durationSeconds)),
+                          SizedBox(height: 20),
+                          PlayButton(
+                              state: state.audiobookIsPlaying ? PlayButtonState
+                                  .PLAYING : PlayButtonState.PAUSED,
+                              onTap: () {
+                                BlocProvider.of<AudiobookInfoBloc>(context).add(
+                                    state.audiobookIsPlaying
+                                        ? UserClickedPause(audiobook: audiobook)
+                                        : UserClickedPlay(audiobook: audiobook)
+                                );
+                                _openNowPlayingScreen(context, audiobook);
+                              }
+                          ),
+                          SizedBox(height: 25),
+                          Container(
+                            width: 400,
+                            child: Center(
+                              child: Text(audiobook.description,
+                                textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ],
+                      )
+                  )
+              );
+            }
+            return CircularProgressIndicator();
           }
         )
       ),

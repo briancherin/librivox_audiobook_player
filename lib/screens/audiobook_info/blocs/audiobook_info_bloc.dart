@@ -28,7 +28,7 @@ class AudiobookInfoBloc extends Bloc<AudiobookInfoEvent, AudiobookInfoState> {
   Stream<AudiobookInfoState> _mapAudiobookInfoOpenedToState(AudiobookInfoOpened event) async* {
     // TODO: Check if the opened audiobook is currently playing.
     bool audiobookCurrentlyPlaying = false;
-    yield state.copyWith(audiobookIsPlaying: audiobookCurrentlyPlaying);
+    yield state.copyWith(audiobook: event.audiobook, currentState: AudiobookInfoLoaded(), audiobookIsPlaying: audiobookCurrentlyPlaying);
   }
 
   Stream<AudiobookInfoState> _mapUserClickedPlayToState(UserClickedPlay event) async* {
