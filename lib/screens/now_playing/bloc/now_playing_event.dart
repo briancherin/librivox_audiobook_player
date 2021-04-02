@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
+import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 
 abstract class NowPlayingEvent extends Equatable {
   @override
@@ -41,3 +42,12 @@ class UserClickedPlaybackSlider extends NowPlayingEvent {}
 class NowPlayingUserClickedPlayButton extends NowPlayingEvent {}
 
 class NowPlayingUserClickedPauseButton extends NowPlayingEvent {}
+
+class NowPlayingUserClickedSkipButton extends NowPlayingEvent {
+  final SkipDirection direction;
+
+  NowPlayingUserClickedSkipButton({@required this.direction});
+
+  @override
+  List<Object> get props => [direction];
+}

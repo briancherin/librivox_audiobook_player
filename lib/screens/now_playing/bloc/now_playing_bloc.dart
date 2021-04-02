@@ -1,5 +1,3 @@
-
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
@@ -7,6 +5,7 @@ import 'package:librivox_audiobook_player/resources/models/models.dart';
 import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_state.dart';
+
 
 class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   final AudiobookPlaybackDelegator playbackDelegator;
@@ -40,6 +39,11 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     if (event is NowPlayingUserClickedPauseButton) {
       yield* _mapUserClickedPauseToState(event);
     }
+
+    if (event is NowPlayingUserClickedSkipButton) {
+      yield* _mapUserClickedSkipButtonToState(event);
+    }
+
 
 
   }
@@ -98,6 +102,10 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     yield state.copyWith(audiobookIsPlaying: false);
   }
 
-
+  Stream<NowPlayingState> _mapUserClickedSkipButtonToState(NowPlayingUserClickedSkipButton event) async* {
+    double newTimestampMillis = playbackDelegator.skip(SkipDirection.BACKWARD, state.audiobook);
+    print("new timestamp: " + newTimestampMillis.toString());
+    yield state.copyWith(currentPositionMillis: newTimestampMillis);
+  }
 
 }
