@@ -44,7 +44,9 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
       yield* _mapUserClickedSkipButtonToState(event);
     }
 
-
+    if (event is NowPlayingAudiobookPositionChanged) {
+      yield* _mapAudiobookPositionChangedToState(event);
+    }
 
   }
 
@@ -91,6 +93,8 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
         audiobookWithChapters = state.audiobook;
       }
 
+      // Initialize audiobook position listener so the UI will be updated when the position changes
+      playbackDelegator.setOnAudiobookPositionChanged((newTimestampMillis) => add(NowPlayingAudiobookPositionChanged(newTimestampMillis: newTimestampMillis)));
       // Start playback
       playbackDelegator.playAudiobook(audiobook: audiobookWithChapters);
 
@@ -103,9 +107,13 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedSkipButtonToState(NowPlayingUserClickedSkipButton event) async* {
-    double newTimestampMillis = playbackDelegator.skip(SkipDirection.BACKWARD, state.audiobook);
-    print("new timestamp: " + newTimestampMillis.toString());
-    yield state.copyWith(currentPositionMillis: newTimestampMillis);
+    await playbackDelegator.skip(event.direction, state.audiobook);
+    // print("new timestamp: " + newTimestampMillis.toString());
+    // yield state.copyWith(currentPositionMillis: newTimestampMillis);
+  }
+
+  Stream<NowPlayingState> _mapAudiobookPositionChangedToState(NowPlayingAudiobookPositionChanged event) async* {
+    yield state.copyWith(currentPositionMillis: event.newTimestampMillis);
   }
 
 }

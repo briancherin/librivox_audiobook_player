@@ -51,3 +51,12 @@ class NowPlayingUserClickedSkipButton extends NowPlayingEvent {
   @override
   List<Object> get props => [direction];
 }
+
+class NowPlayingAudiobookPositionChanged extends NowPlayingEvent {
+  final double newTimestampMillis;
+
+  NowPlayingAudiobookPositionChanged({@required this.newTimestampMillis});
+
+  @override
+  List<Object> get props => [newTimestampMillis];
+}

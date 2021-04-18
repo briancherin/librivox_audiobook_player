@@ -7,7 +7,7 @@ abstract class Audiobook {
   final String title;
   final String author;
   final String description;
-  final int durationSeconds; // in seconds
+  final double durationSeconds; // in seconds
   final int numChapters;
   final String coverImageUrl; // TODO: Make a BookCoverImage object in case it is not a url but a local file
   final List<Chapter> chapters;
@@ -31,7 +31,7 @@ class LibrivoxAudiobook extends Audiobook {
   final String title;
   final String author;
   final String description;
-  final int durationSeconds;
+  final double durationSeconds;
   final int numChapters;
   final String coverImageUrl;
   final List<LibrivoxChapter> chapters;

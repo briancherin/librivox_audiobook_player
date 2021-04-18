@@ -6,6 +6,8 @@ import 'package:audioplayer/audioplayer.dart';
 class AudioPlayerService {
   final AudioPlayer _audioPlugin = AudioPlayer();
 
+  int _currentPositionMillis = 0;
+
   AudioPlayerService() {
     /*_audioPlugin.onAudioPositionChanged.listen((Duration event) {
       event.
@@ -25,13 +27,23 @@ class AudioPlayerService {
     _audioPlugin.stop();
   }
 
-  setCurrentPosition(double newPositionMillis) {
-    _audioPlugin.seek(newPositionMillis * 1000);
+  setCurrentPosition(int newPositionMillis) async {
+    double seconds = (newPositionMillis ~/ 1000) as double;
+    await _audioPlugin.seek(seconds);
   }
 
+
   // TODO: GET ACTUAL VALUE
-  double getCurrentPositionMillis() {
-    return 0;
-    //return _audioPlugin.state
+  int getCurrentPositionMillis() {
+    return _currentPositionMillis;
+  }
+
+  void setAudioPositionChangedListener(Function(double val) callback) {
+    _audioPlugin.onAudioPositionChanged.listen((Duration event) {
+      callback(event.inMilliseconds as double);
+      _currentPositionMillis = event.inMilliseconds;
+      // print("${event.inMilliseconds as double}");
+      // _currentPositionMillis = 500;
+    });
   }
 }
