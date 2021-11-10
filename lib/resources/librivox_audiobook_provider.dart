@@ -5,7 +5,7 @@ import 'package:librivox_audiobook_player/resources/models/chapter.dart';
 
 class LibrivoxAudiobookProvider extends AudiobookProvider {
 
-  String archiveUrl = "https://archive.org/advancedsearch.php?q=collection:(librivoxaudio)&fl[]=avg_rating,description,downloads,identifier,item_size,title&sort[]=addeddate+desc&rows=10&page=1&output=json";
+  String baseArchiveUrl = "https://archive.org/advancedsearch.php?q=collection:(librivoxaudio)&fl[]=avg_rating,description,downloads,identifier,item_size,title&sort[]=addeddate+desc&output=json";
 
   String baseImageUrl = "https://archive.org/services/get-item-image.php?identifier=";
 
@@ -13,6 +13,9 @@ class LibrivoxAudiobookProvider extends AudiobookProvider {
 
   @override
   Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) {
+    String archiveQueryUrl = getArchiveQueryUrl(offset: offset, limit: limit);
+    print("LibrivoxAudiobookProvider. fetchAudiobooks queryUrl: $archiveQueryUrl");
+
     //TODO: Get actual data
     List<Audiobook> audiobooks = [
       LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", durationSeconds: 1800),
@@ -34,6 +37,16 @@ class LibrivoxAudiobookProvider extends AudiobookProvider {
     return Future.value(list);
   }
 
+  String getArchiveQueryUrl({int offset, int limit}) {
+    // Pages are indexed starting at 1.
+    // The offset should always be a multiple of limit, since
+    // we are always retrieving more audiobooks in increments of $limit.
+    int page = offset ~/ limit + 1;
 
+    // The number of rows is the limit value because that is how
+    // many results we want to show up on each query. i.e. on a given query,
+    // we will only be receiving that many results.
+    return baseArchiveUrl + "&rows=$limit&page=$page";
+  }
 
 }
