@@ -1,27 +1,36 @@
 
+import 'dart:convert';
+
 import 'package:librivox_audiobook_player/resources/models/audiobook.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
 import 'package:librivox_audiobook_player/resources/models/chapter.dart';
 
+import 'models/librivox_audiobook.dart';
+import 'package:http/http.dart' as http;
+
 class LibrivoxAudiobookProvider extends AudiobookProvider {
 
-  String baseArchiveUrl = "https://archive.org/advancedsearch.php?q=collection:(librivoxaudio)&fl[]=avg_rating,description,downloads,identifier,item_size,title&sort[]=addeddate+desc&output=json";
+  String baseArchiveUrl = "https://archive.org/advancedsearch.php?q=collection:(librivoxaudio)&fl[]=avg_rating,description,downloads,identifier,item_size,title,creator&sort[]=addeddate+desc&output=json";
 
-  String baseImageUrl = "https://archive.org/services/get-item-image.php?identifier=";
 
-  String getImageUrl (String identifier) => baseImageUrl + identifier;
 
   @override
-  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) {
+  Future<List<Audiobook>> fetchAudiobooks({int offset, int limit}) async {
     String archiveQueryUrl = getArchiveQueryUrl(offset: offset, limit: limit);
     print("LibrivoxAudiobookProvider. fetchAudiobooks queryUrl: $archiveQueryUrl");
 
-    //TODO: Get actual data
-    List<Audiobook> audiobooks = [
-      LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", durationSeconds: 1800),
-      LibrivoxAudiobook(librivoxItemId: "secret_garden_librivox", coverImageUrl: getImageUrl("secret_garden_librivox"), title: "Book 2", numChapters: 5, author: "Bob Jones", durationSeconds: 1800),
-      LibrivoxAudiobook(librivoxItemId: "odyssey_butler_librivox", coverImageUrl: getImageUrl("odyssey_butler_librivox"), title: "Book 3", numChapters: 5, author: "Jane Janeson", durationSeconds: 1800),
-    ];
+    List<Audiobook> audiobooks = [];
+
+    final response = await http.get(Uri.parse(archiveQueryUrl));
+    if (response.statusCode == 200) {
+      // Request succeeded
+      final audiobookJsonList = jsonDecode(response.body)["response"]["docs"];
+      for (final audiobookJson in audiobookJsonList) {
+        audiobooks.add(LibrivoxAudiobook.fromJSON(audiobookJson));
+      }
+    } else {
+      // TODO: Show error / do something if request fails
+    }
 
     return Future.value(audiobooks);
   }

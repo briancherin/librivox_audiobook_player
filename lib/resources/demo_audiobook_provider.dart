@@ -1,5 +1,6 @@
 
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'models/librivox_audiobook.dart';
 import 'models/models.dart';
 
 import 'package:lipsum/lipsum.dart' as lipsum;

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'package:librivox_audiobook_player/resources/models/librivox_audiobook.dart';
 import 'package:librivox_audiobook_player/resources/models/models.dart';
 import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';

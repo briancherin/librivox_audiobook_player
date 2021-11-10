@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:librivox_audiobook_player/resources/demo_audiobook_provider.dart';
 import 'librivox_audiobook_provider.dart';
+import 'models/librivox_audiobook.dart';
 import 'models/models.dart';
 
 /*
@@ -15,7 +16,7 @@ enum AudiobookProviderName { DEMO, LIBRIVOX }
 class AudiobookRepository {
   final Map<AudiobookProviderName, AudiobookProvider> _audiobookProviders = {
     AudiobookProviderName.LIBRIVOX: LibrivoxAudiobookProvider(),
-    AudiobookProviderName.DEMO: DemoAudiobookProvider(),
+    // AudiobookProviderName.DEMO: DemoAudiobookProvider(),
   };
 
   Future<List<Audiobook>> fetchAudiobooks({int offset=0, int limit}) async {
@@ -37,6 +38,13 @@ class AudiobookRepository {
 }
 
 abstract class AudiobookProvider {
+
+  /**
+   * @param offset  The index of the audiobook to start the query at
+   * @param limit   The max number of audiobooks to load for this query
+   */
   Future<List<Audiobook>> fetchAudiobooks({int offset, int limit});
+
+
   Future<List<Chapter>> fetchChapters({@required Audiobook audiobook});
 }

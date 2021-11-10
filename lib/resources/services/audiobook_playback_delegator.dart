@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:librivox_audiobook_player/resources/models/librivox_audiobook.dart';
 import 'package:librivox_audiobook_player/resources/models/models.dart';
 import 'package:librivox_audiobook_player/resources/services/audio_player_service.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_bloc.dart';
