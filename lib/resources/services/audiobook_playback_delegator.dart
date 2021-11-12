@@ -23,7 +23,7 @@ class AudiobookPlaybackDelegator {
       }
 
       // Fetch current chapter and timestamp in chapter
-      Chapter currChapter = audiobook.chapters[0]; // TODO: GET ACTUAL CURR CHAPTER FROM STORAGE
+      Chapter currChapter = audiobook.chapters[0]; // TODO: GET ACTUAL CURR CHAPTER INDEX FROM STORAGE
 
       // TODO: Also get current timestamp
 
@@ -39,6 +39,7 @@ class AudiobookPlaybackDelegator {
   }
 
   setAudiobookPosition(int timestampMillis) async {
+    print("Setting curr position: $timestampMillis");
     await audioPlayerService.setCurrentPosition(timestampMillis);
   }
 
@@ -49,7 +50,7 @@ class AudiobookPlaybackDelegator {
     var offset = direction == SkipDirection.FORWARD ? SKIP_TIME_MILLIS : -1 * SKIP_TIME_MILLIS;
     int newMillis = currMillis + offset;
     newMillis = max(0, newMillis);
-    newMillis = min((audiobook.durationSeconds * 1000) as int, newMillis);
+    newMillis = min((audiobook.durationSeconds * 1000).toInt(), newMillis);
 
     print("Received skip request for $direction $SKIP_TIME_MILLIS millis. Curr timestamp: $currMillis, new timestamp: $newMillis");
 

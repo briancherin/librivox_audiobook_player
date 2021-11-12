@@ -39,7 +39,6 @@ class AudiobookInfoBloc extends Bloc<AudiobookInfoEvent, AudiobookInfoState> {
     // the chapters of the book (i.e. number of chapters)
     List<Chapter> chapters = await audiobookRepository.fetchChapters(audiobook: audiobook);
     audiobook = audiobook.withChapters(chapters);
-    print("Got chapters info: " + audiobook.chapters.toString());
 
     yield state.copyWith(audiobook: audiobook, currentState: AudiobookInfoLoaded(), audiobookIsPlaying: audiobookCurrentlyPlaying);
   }

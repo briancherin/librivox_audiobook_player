@@ -77,6 +77,9 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     // If currently paused, only set the new position (wait for the user to press play)
     print("USER RELEASED PLAYBACK SLIDER. PLAYING AUDIO AT POSITION: ${event.releasePosition}.");
 
+    await playbackDelegator.setAudiobookPosition(event.releasePosition.toInt());
+
+
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
