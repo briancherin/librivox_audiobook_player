@@ -70,32 +70,22 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   Stream<NowPlayingState> _mapUserClickedPlaybackSliderToState(UserClickedPlaybackSlider event) async* {
     // TODO: Pause the audio currently being played (if playing)
     print("USER CLICKED PLAYBACK SLIDER. PAUSING ANY AUDIO.");
+    playbackDelegator.pauseAudiobook();
   }
 
   Stream<NowPlayingState> _mapUserReleasedPlaybackSliderToState(UserReleasedPlaybackSlider event) async* {
     // TODO: Start playing the audio at this position
     // If currently paused, only set the new position (wait for the user to press play)
-    print("USER RELEASED PLAYBACK SLIDER. PLAYING AUDIO AT POSITION: ${event.releasePosition}.");
+    print("USER RELEASED PLAYBACK SLIDER. PLAYING AUDIO AT POSITION: ${event.releasePosition.toInt()}.");
 
     await playbackDelegator.setAudiobookPosition(event.releasePosition.toInt());
 
+    playbackDelegator.playAudiobook(audiobook: state.audiobook);
 
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
-      Audiobook audiobook = state.audiobook; // Either audiobook already has its chapters retrieved, or they will be retrieved
-
-     /* // If this is the first time pressing play, load the list of chapters for the audiobook
-      if (state.audiobook is LibrivoxAudiobook && !state.chaptersLoaded) {
-        // Load chapters and track urls for this audiobook
-        List<LibrivoxChapter> chapters = (await audiobookRepository.fetchChapters(audiobook: state.audiobook)).cast<LibrivoxChapter>();
-
-        // Set the chapters in the audiobook object and mark chapters as loaded
-        audiobook = state.audiobook.withChapters(chapters);
-        yield state.copyWith(audiobook: audiobook, chaptersLoaded: true);
-      } else {
-        audiobook = state.audiobook;
-      }*/
+      Audiobook audiobook = state.audiobook;
 
       // Initialize audiobook position listener so the UI will be updated when the position changes
       playbackDelegator.setOnAudiobookPositionChanged((newTimestampMillis) => add(NowPlayingAudiobookPositionChanged(newTimestampMillis: newTimestampMillis)));
