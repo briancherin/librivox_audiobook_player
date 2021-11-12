@@ -41,9 +41,11 @@ class LibrivoxAudiobook extends Audiobook {
       title: this.title,
       author: this.author,
       description: this.description,
-      durationSeconds: this.durationSeconds,
       coverImageUrl: this.coverImageUrl,
       chapters: chapters.cast<LibrivoxChapter>(),
+
+      // Now that we have chapters, we can calculate total duration
+      durationSeconds: getTotalDuration(chapters),
     );
   }
 
@@ -57,5 +59,15 @@ class LibrivoxAudiobook extends Audiobook {
       // TODO: DO THIS BETTER
       coverImageUrl: "https://archive.org/services/get-item-image.php?identifier=" + json["identifier"]
     );
+  }
+
+  double getTotalDuration(List<Chapter> chapters) {
+    double duration = 0;
+
+    for (final chapter in chapters) {
+      duration += chapter.durationSeconds;
+    }
+
+    return duration;
   }
 }

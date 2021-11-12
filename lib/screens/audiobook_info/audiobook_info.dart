@@ -41,7 +41,7 @@ class AudiobookInfoScreen extends StatelessWidget {
                           Text("by " + audiobook.author,
                               style: TextStyle(fontSize: 15)),
                           SizedBox(height: 10),
-                          Text(audiobook.chapters.length.toString() + " chapters"),
+                          Text(audiobook.numChapters.toString() + " chapters"),
                           Text("Duration: " + getTimestampFromSeconds(
                               audiobook.durationSeconds)),
                           SizedBox(height: 20),
@@ -95,7 +95,7 @@ class AudiobookInfoScreen extends StatelessWidget {
 
   String getTimestampFromSeconds(double totalSeconds) {
     if (totalSeconds != null) {
-      int totalSecondsRounded = totalSeconds as int;
+      int totalSecondsRounded = (totalSeconds ~/ 1);
       int seconds = totalSecondsRounded % 60;
       int minutes = ((totalSecondsRounded - seconds) ~/ 60) % 60;
       int hours = (totalSecondsRounded - seconds - (minutes * 60)) ~/ 3600;

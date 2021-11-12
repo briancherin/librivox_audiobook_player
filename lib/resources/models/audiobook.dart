@@ -11,6 +11,8 @@ abstract class Audiobook {
       coverImageUrl; // TODO: Make a BookCoverImage object in case it is not a url but a local file
   final List<Chapter> chapters;
 
+  get numChapters => chapters.length;
+
   Audiobook({
     @required this.title,
     @required this.author,
