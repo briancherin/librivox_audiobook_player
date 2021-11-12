@@ -56,7 +56,10 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     // triggered with the audiobook passed in here, and now we tell the UI what book it is.)
     // Also retrieve the current position in the audiobook and yield it in the initial state
     double currPosMillis = 0; // TODO: get actual current position in audiobook from storage
-    yield state.copyWith(currentState: AudiobookUserDataLoaded(), audiobook: event.audiobook, currentPositionMillis: currPosMillis);
+    int currChapter = 0; // TODO: get actual current chapter in audiobook from storage
+
+    yield state.copyWith(currentState: AudiobookUserDataLoaded(),
+        audiobook: event.audiobook, currentPositionMillis: currPosMillis, currentChapter: currChapter);
 
     if (event.shouldBeginPlayback) {
       add(NowPlayingUserClickedPlayButton());

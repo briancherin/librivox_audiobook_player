@@ -54,7 +54,7 @@ class NowPlayingScreen extends StatelessWidget {
                               _getSkipButton(context, SkipDirection.FORWARD)
                             ],
                           ),
-                          _getAudioSlider(context, state.audiobook, state.currentPositionMillis),
+                          _getAudioSlider(context, state.audiobook, state.currentPositionMillis, state.currentChapter),
                         ]
                     ),
                   )
@@ -88,9 +88,9 @@ class NowPlayingScreen extends StatelessWidget {
     );
   }
 
-  _getAudioSlider(context, Audiobook audiobook, double currPositionMillis) {
+  _getAudioSlider(context, Audiobook audiobook, double currPositionMillis, int currChapterIndex) {
     return AudioSlider(
-      durationMillis: audiobook.durationSeconds * 1000.0,
+      durationMillis: audiobook.chapters[currChapterIndex].durationSeconds * 1000.0,
       currPositionMillis: currPositionMillis,
       onChanged: (newPosition) {
         BlocProvider.of<NowPlayingBloc>(context).add(UserMovedPlaybackSlider(position: newPosition));
