@@ -34,9 +34,9 @@ class DemoAudiobookProvider extends AudiobookProvider {
   List<Audiobook> _data(int size) {
     var getDesc = () {return lipsum.createParagraph(numSentences: 10);};
     List<Audiobook> d = [
-    LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", numChapters: 5, author: "Billy Bob", durationSeconds: 1800, description: getDesc()),
-    LibrivoxAudiobook(librivoxItemId: "secret_garden_librivox", coverImageUrl: getImageUrl("secret_garden_librivox"), title: "Book 2", numChapters: 5, author: "Bob Jones", durationSeconds: 1800, description: getDesc()),
-    LibrivoxAudiobook(librivoxItemId: "odyssey_butler_librivox", coverImageUrl: getImageUrl("odyssey_butler_librivox"), title: "Book 3", numChapters: 5, author: "Jane Janeson", durationSeconds: 1800, description: getDesc()),
+    LibrivoxAudiobook(librivoxItemId: "dracula_librivox", coverImageUrl: getImageUrl("dracula_librivox"), title: "Book 1", author: "Billy Bob", durationSeconds: 1800, description: getDesc()),
+    LibrivoxAudiobook(librivoxItemId: "secret_garden_librivox", coverImageUrl: getImageUrl("secret_garden_librivox"), title: "Book 2", author: "Bob Jones", durationSeconds: 1800, description: getDesc()),
+    LibrivoxAudiobook(librivoxItemId: "odyssey_butler_librivox", coverImageUrl: getImageUrl("odyssey_butler_librivox"), title: "Book 3",  author: "Jane Janeson", durationSeconds: 1800, description: getDesc()),
     ];
     return List<Audiobook>.generate(size, (i) => d[i % d.length]);
  }

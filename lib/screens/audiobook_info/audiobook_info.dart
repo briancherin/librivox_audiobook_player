@@ -41,7 +41,7 @@ class AudiobookInfoScreen extends StatelessWidget {
                           Text("by " + audiobook.author,
                               style: TextStyle(fontSize: 15)),
                           SizedBox(height: 10),
-                          Text(audiobook.numChapters.toString() + " chapters"),
+                          Text(audiobook.chapters.length.toString() + " chapters"),
                           Text("Duration: " + getTimestampFromSeconds(
                               audiobook.durationSeconds)),
                           SizedBox(height: 20),

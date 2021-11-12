@@ -15,7 +15,6 @@ class LibrivoxAudiobook extends Audiobook {
   final String author;
   final String description;
   final double durationSeconds;
-  final int numChapters;
   final String coverImageUrl;
   final List<LibrivoxChapter> chapters;
 
@@ -25,7 +24,6 @@ class LibrivoxAudiobook extends Audiobook {
     @required this.author,
     @required this.description,
     this.durationSeconds,
-    this.numChapters,
     this.coverImageUrl,
     this.chapters,
   }) : super(
@@ -33,7 +31,6 @@ class LibrivoxAudiobook extends Audiobook {
       author: author,
       description: description,
       durationSeconds: durationSeconds,
-      numChapters: numChapters,
       coverImageUrl: coverImageUrl,
       chapters: chapters);
 
@@ -45,9 +42,8 @@ class LibrivoxAudiobook extends Audiobook {
       author: this.author,
       description: this.description,
       durationSeconds: this.durationSeconds,
-      numChapters: this.numChapters,
       coverImageUrl: this.coverImageUrl,
-      chapters: chapters,
+      chapters: chapters.cast<LibrivoxChapter>(),
     );
   }
 

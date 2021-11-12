@@ -2,6 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:librivox_audiobook_player/resources/audiobook_repository.dart';
+import 'package:librivox_audiobook_player/resources/models/librivox_audiobook.dart';
 import 'package:librivox_audiobook_player/resources/models/models.dart';
 import 'package:librivox_audiobook_player/resources/services/audiobook_playback_delegator.dart';
 import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook_info_event.dart';
@@ -31,7 +32,16 @@ class AudiobookInfoBloc extends Bloc<AudiobookInfoEvent, AudiobookInfoState> {
   Stream<AudiobookInfoState> _mapAudiobookInfoOpenedToState(AudiobookInfoOpened event) async* {
     // TODO: Check if the opened audiobook is currently playing.
     bool audiobookCurrentlyPlaying = false;
-    yield state.copyWith(audiobook: event.audiobook, currentState: AudiobookInfoLoaded(), audiobookIsPlaying: audiobookCurrentlyPlaying);
+
+    Audiobook audiobook = event.audiobook;
+
+    // Now that the user selected this book to open, we want to retrieve info about
+    // the chapters of the book (i.e. number of chapters)
+    List<Chapter> chapters = await audiobookRepository.fetchChapters(audiobook: audiobook);
+    audiobook = audiobook.withChapters(chapters);
+    print("Got chapters info: " + audiobook.chapters.toString());
+
+    yield state.copyWith(audiobook: audiobook, currentState: AudiobookInfoLoaded(), audiobookIsPlaying: audiobookCurrentlyPlaying);
   }
 
   Stream<AudiobookInfoState> _mapUserClickedPlayToState(UserClickedPlay event) async* {

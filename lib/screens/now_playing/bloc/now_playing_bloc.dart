@@ -80,24 +80,24 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
-      Audiobook audiobookWithChapters; // Either audiobook already has its chapters retrieved, or they will be retrieved
+      Audiobook audiobook; // Either audiobook already has its chapters retrieved, or they will be retrieved
 
-      // If this is the first time pressing play, load the list of chapters for the audiobook
+     /* // If this is the first time pressing play, load the list of chapters for the audiobook
       if (state.audiobook is LibrivoxAudiobook && !state.chaptersLoaded) {
         // Load chapters and track urls for this audiobook
         List<LibrivoxChapter> chapters = (await audiobookRepository.fetchChapters(audiobook: state.audiobook)).cast<LibrivoxChapter>();
 
         // Set the chapters in the audiobook object and mark chapters as loaded
-        audiobookWithChapters = state.audiobook.withChapters(chapters);
-        yield state.copyWith(audiobook: audiobookWithChapters, chaptersLoaded: true);
+        audiobook = state.audiobook.withChapters(chapters);
+        yield state.copyWith(audiobook: audiobook, chaptersLoaded: true);
       } else {
-        audiobookWithChapters = state.audiobook;
-      }
+        audiobook = state.audiobook;
+      }*/
 
       // Initialize audiobook position listener so the UI will be updated when the position changes
       playbackDelegator.setOnAudiobookPositionChanged((newTimestampMillis) => add(NowPlayingAudiobookPositionChanged(newTimestampMillis: newTimestampMillis)));
       // Start playback
-      playbackDelegator.playAudiobook(audiobook: audiobookWithChapters);
+      playbackDelegator.playAudiobook(audiobook: audiobook);
 
       yield state.copyWith(audiobookIsPlaying: true);
   }

@@ -7,7 +7,6 @@ abstract class Audiobook {
   final String author;
   final String description;
   final double durationSeconds; // in seconds
-  final int numChapters;
   final String
       coverImageUrl; // TODO: Make a BookCoverImage object in case it is not a url but a local file
   final List<Chapter> chapters;
@@ -17,7 +16,6 @@ abstract class Audiobook {
     @required this.author,
     @required this.description,
     this.durationSeconds,
-    this.numChapters,
     this.coverImageUrl,
     this.chapters,
   });
