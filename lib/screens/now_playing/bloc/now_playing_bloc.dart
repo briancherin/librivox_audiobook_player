@@ -80,7 +80,7 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
-      Audiobook audiobook; // Either audiobook already has its chapters retrieved, or they will be retrieved
+      Audiobook audiobook = state.audiobook; // Either audiobook already has its chapters retrieved, or they will be retrieved
 
      /* // If this is the first time pressing play, load the list of chapters for the audiobook
       if (state.audiobook is LibrivoxAudiobook && !state.chaptersLoaded) {
