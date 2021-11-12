@@ -11,6 +11,7 @@ import 'package:librivox_audiobook_player/resources/services/audiobook_playback_
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_bloc.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/components/audio_slider.dart';
+import 'package:librivox_audiobook_player/util/string_util.dart';
 
 import 'bloc/now_playing_state.dart';
 
@@ -55,6 +56,8 @@ class NowPlayingScreen extends StatelessWidget {
                             ],
                           ),
                           _getAudioSlider(context, state.audiobook, state.currentPositionMillis, state.currentChapter),
+                          SizedBox(width: 10),
+                          Text(StringUtil.getTimestampFromSeconds(state.currentPositionMillis / 1000)), // Current timestamp
                         ]
                     ),
                   )

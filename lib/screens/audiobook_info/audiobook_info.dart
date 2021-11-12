@@ -13,6 +13,7 @@ import 'package:librivox_audiobook_player/screens/audiobook_info/blocs/audiobook
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_bloc.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_event.dart';
 import 'package:librivox_audiobook_player/screens/now_playing/now_playing.dart';
+import 'package:librivox_audiobook_player/util/string_util.dart';
 
 import 'blocs/audiobook_info_state.dart';
 
@@ -42,7 +43,7 @@ class AudiobookInfoScreen extends StatelessWidget {
                               style: TextStyle(fontSize: 15)),
                           SizedBox(height: 10),
                           Text(audiobook.numChapters.toString() + " chapters"),
-                          Text("Duration: " + getTimestampFromSeconds(
+                          Text("Duration: " + StringUtil.getTimestampFromSeconds(
                               audiobook.durationSeconds)),
                           SizedBox(height: 20),
                           PlayButton(
@@ -92,21 +93,4 @@ class AudiobookInfoScreen extends StatelessWidget {
       })
     );
   }
-
-  String getTimestampFromSeconds(double totalSeconds) {
-    if (totalSeconds != null) {
-      int totalSecondsRounded = (totalSeconds ~/ 1);
-      int seconds = totalSecondsRounded % 60;
-      int minutes = ((totalSecondsRounded - seconds) ~/ 60) % 60;
-      int hours = (totalSecondsRounded - seconds - (minutes * 60)) ~/ 3600;
-
-      return "${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}";
-    }
-    return "?";
-  }
-
-  String padNumber(int num) {
-    return num < 10 ? "0$num" : "$num";
-  }
-
 }
