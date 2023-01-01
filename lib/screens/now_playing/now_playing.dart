@@ -13,6 +13,7 @@ import 'package:librivox_audiobook_player/screens/now_playing/bloc/now_playing_e
 import 'package:librivox_audiobook_player/screens/now_playing/components/audio_slider.dart';
 import 'package:librivox_audiobook_player/util/string_util.dart';
 
+import '../../resources/models/chapter.dart';
 import 'bloc/now_playing_state.dart';
 
 
@@ -29,6 +30,8 @@ class NowPlayingScreen extends StatelessWidget {
               return CircularProgressIndicator(strokeWidth: 4);
             }
             if (state.currentState is AudiobookUserDataLoaded) {
+              Chapter currentChapter = state.audiobook.chapters[state.currentChapterIndex];
+
               return Container(
                   child: Center(
                     child: Column(
@@ -55,9 +58,9 @@ class NowPlayingScreen extends StatelessWidget {
                               _getSkipButton(context, SkipDirection.FORWARD)
                             ],
                           ),
-                          _getAudioSlider(context, state.audiobook, state.currentPositionMillis, state.currentChapter),
+                          _getAudioSlider(context, state.audiobook, state.currentPositionMillis, state.currentChapterIndex),
                           SizedBox(width: 10),
-                          Text(StringUtil.getTimestampFromSeconds(state.currentPositionMillis / 1000)), // Current timestamp
+                          _getTimestampIndicator(state.currentPositionMillis, currentChapter.durationSeconds), // Current timestamp and time remaining in chapter
                         ]
                     ),
                   )
@@ -104,6 +107,25 @@ class NowPlayingScreen extends StatelessWidget {
       onChangeEnd: (newPosition) {
         BlocProvider.of<NowPlayingBloc>(context).add(UserReleasedPlaybackSlider(releasePosition: newPosition));
       },
+    );
+  }
+
+  // Displays the current timestamp within the chapter, and the amount of time remaining in chapter
+  _getTimestampIndicator(double currPositionMillis, double chapterDurationSeconds) {
+
+    double currPositionSeconds = (currPositionMillis ~/ 1000) * 1.0;
+    double secondsRemaining = chapterDurationSeconds - currPositionSeconds;
+
+    String currTimestamp = StringUtil.getTimestampFromSeconds(currPositionSeconds);
+    String secondsRemainingString = StringUtil.getTimestampFromSeconds(secondsRemaining);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(currTimestamp),
+        Text(' / '),
+        Text('-' + secondsRemainingString)
+      ]
     );
   }
 
