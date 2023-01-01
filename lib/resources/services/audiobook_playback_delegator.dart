@@ -38,6 +38,10 @@ class AudiobookPlaybackDelegator {
     audioPlayerService.pause();
   }
 
+  stopAudiobook() {
+    audioPlayerService.stop();
+  }
+
   setAudiobookPosition(int timestampMillis) async {
     print("Setting curr position: $timestampMillis");
     await audioPlayerService.setCurrentPosition(timestampMillis);

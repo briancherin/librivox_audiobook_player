@@ -110,7 +110,34 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapAudiobookPositionChangedToState(NowPlayingAudiobookPositionChanged event) async* {
-    yield state.copyWith(currentPositionMillis: event.newTimestampMillis);
+
+    bool audiobookIsPlaying = state.audiobookIsPlaying;
+    int currChapterIndex = state.currentChapterIndex;
+
+    // Check if we have reached the end of the current chapter
+    double newTimestampSeconds = event.newTimestampMillis / 1000;
+    double currentChapterLength = state.audiobook.chapters[currChapterIndex].durationSeconds;
+    if (newTimestampSeconds >= currentChapterLength) {
+      // We have reached the end of the current chapter.
+
+      // Check if this was the last chapter
+      if (currChapterIndex == state.audiobook.chapters.length) {
+        // Stop playback
+        playbackDelegator.stopAudiobook();
+        audiobookIsPlaying = false;
+      } else {
+        // Move to the next chapter
+        currChapterIndex++;
+
+        //TODO: TRIGGER PLAYBACK OF NEW CHAPTER
+      }
+
+
+    }
+
+
+
+    yield state.copyWith(currentPositionMillis: event.newTimestampMillis, audiobookIsPlaying: audiobookIsPlaying, currentChapter: currChapterIndex);
   }
 
 }

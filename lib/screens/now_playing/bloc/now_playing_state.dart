@@ -8,9 +8,9 @@ class NowPlayingState extends Equatable {
   final double currentPositionMillis;
   final bool audiobookIsPlaying;
   final bool chaptersLoaded;
-  final int currentChapter;
+  final int currentChapterIndex;
 
-  NowPlayingState({@required this.currentState, this.audiobook, this.currentPositionMillis, this.audiobookIsPlaying, this.chaptersLoaded = false, this.currentChapter});
+  NowPlayingState({@required this.currentState, this.audiobook, this.currentPositionMillis, this.audiobookIsPlaying, this.chaptersLoaded = false, this.currentChapterIndex});
 
   NowPlayingState copyWith({NowPlayingState currentState, Audiobook audiobook, double currentPositionMillis, bool audiobookIsPlaying, bool chaptersLoaded, int currentChapter}) {
     return NowPlayingState(
@@ -19,12 +19,12 @@ class NowPlayingState extends Equatable {
       currentPositionMillis: currentPositionMillis ?? this.currentPositionMillis,
       audiobookIsPlaying: audiobookIsPlaying ?? this.audiobookIsPlaying,
       chaptersLoaded: this.chaptersLoaded,
-      currentChapter: currentChapter ?? this.currentChapter,
+      currentChapterIndex: currentChapter ?? this.currentChapterIndex,
     );
   }
 
   @override
-  List<Object> get props => [currentState, audiobook, currentPositionMillis, audiobookIsPlaying, currentChapter];
+  List<Object> get props => [currentState, audiobook, currentPositionMillis, audiobookIsPlaying, currentChapterIndex];
 }
 
 class NowPlayingInitial extends NowPlayingState {}
