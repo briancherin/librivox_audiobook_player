@@ -38,29 +38,12 @@ class NowPlayingScreen extends StatelessWidget {
                         children: [
                           CoverImage(audiobook: state.audiobook),
                           SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _getSkipButton(context, SkipDirection.BACKWARD),
-                              SizedBox(width: 10),
-                              PlayButton(
-                                state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
-                                onTap: () {
-                                  BlocProvider.of<NowPlayingBloc>(context).add(
-                                      state.audiobookIsPlaying
-                                          ? NowPlayingUserClickedPauseButton()
-                                          : NowPlayingUserClickedPlayButton()
-                                  );
-                                },
-                              ),
-                              SizedBox(width: 10),
-                              _getSkipButton(context, SkipDirection.FORWARD)
-                            ],
-                          ),
+                          _getChapterInfoHeader(state.audiobook, currentChapter),
+                          SizedBox(height: 10),
                           _getAudioSlider(context, state.audiobook, state.currentPositionMillis, state.currentChapterIndex),
-                          SizedBox(width: 10),
                           _getTimestampIndicator(state.currentPositionMillis, currentChapter.durationSeconds), // Current timestamp and time remaining in chapter
+                          SizedBox(height: 20),
+                          _getPlayerControls(context, state)
                         ]
                     ),
                   )
@@ -76,6 +59,46 @@ class NowPlayingScreen extends StatelessWidget {
 
 
       )
+    );
+  }
+
+
+  _getChapterInfoHeader(Audiobook audiobook, Chapter currentChapter) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text('Chapter ${currentChapter.chapterNumber} - ${currentChapter.title}',
+          style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+        SizedBox(height:5),
+        Text(audiobook.title, textAlign: TextAlign.center),
+      ]
+    );
+
+
+
+  }
+
+  _getPlayerControls(BuildContext context, NowPlayingState state) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _getSkipButton(context, SkipDirection.BACKWARD),
+        SizedBox(width: 10),
+        PlayButton(
+          state: state.audiobookIsPlaying ? PlayButtonState.PLAYING : PlayButtonState.PAUSED,
+          onTap: () {
+            BlocProvider.of<NowPlayingBloc>(context).add(
+                state.audiobookIsPlaying
+                    ? NowPlayingUserClickedPauseButton()
+                    : NowPlayingUserClickedPlayButton()
+            );
+          },
+        ),
+        SizedBox(width: 10),
+        _getSkipButton(context, SkipDirection.FORWARD)
+      ],
     );
   }
 

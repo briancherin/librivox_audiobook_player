@@ -38,7 +38,7 @@ class AudiobookInfoScreen extends StatelessWidget {
                           CoverImage(audiobook: audiobook),
                           SizedBox(height: 30),
                           Text(
-                            audiobook.title, style: TextStyle(fontSize: 30),),
+                            audiobook.title, style: TextStyle(fontSize: 30), textAlign: TextAlign.center),
                           Text("by " + audiobook.author,
                               style: TextStyle(fontSize: 15)),
                           SizedBox(height: 10),
