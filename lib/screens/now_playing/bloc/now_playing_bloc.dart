@@ -71,20 +71,15 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   }
 
   Stream<NowPlayingState> _mapUserClickedPlaybackSliderToState(UserClickedPlaybackSlider event) async* {
-    // TODO: Pause the audio currently being played (if playing)
-    print("USER CLICKED PLAYBACK SLIDER. PAUSING ANY AUDIO.");
-    playbackDelegator.pauseAudiobook();
+    // If currently playing, ensure that only the new slider position
+    // and not the actual playback timestamp is shown on the slider
+    yield state.copyWith(userIsMovingAudioSlider: true);
   }
 
   Stream<NowPlayingState> _mapUserReleasedPlaybackSliderToState(UserReleasedPlaybackSlider event) async* {
-    // TODO: Start playing the audio at this position
-    // If currently paused, only set the new position (wait for the user to press play)
-    print("USER RELEASED PLAYBACK SLIDER. PLAYING AUDIO AT POSITION: ${event.releasePosition.toInt()}.");
+    yield state.copyWith(userIsMovingAudioSlider: false);
 
     await playbackDelegator.setAudiobookPosition(event.releasePosition.toInt());
-
-    playbackDelegator.playAudiobook(audiobook: state.audiobook);
-
   }
 
   Stream<NowPlayingState> _mapUserClickedPlayToState(NowPlayingUserClickedPlayButton event) async* {
@@ -114,30 +109,33 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
     bool audiobookIsPlaying = state.audiobookIsPlaying;
     int currChapterIndex = state.currentChapterIndex;
 
-    // Check if we have reached the end of the current chapter
-    double newTimestampSeconds = event.newTimestampMillis / 1000;
-    double currentChapterLength = state.audiobook.chapters[currChapterIndex].durationSeconds;
-    if (newTimestampSeconds >= currentChapterLength) {
-      // We have reached the end of the current chapter.
+    // If the user is currently moving the audio slider, prevent the slider
+    // position from being changed by the actual playback so that only their
+    // movement sets the slider position
+    if (state.userIsMovingAudioSlider) {
+      yield state;
+    } else {
+      // Check if we have reached the end of the current chapter
+      double newTimestampSeconds = event.newTimestampMillis / 1000;
+      double currentChapterLength = state.audiobook.chapters[currChapterIndex].durationSeconds;
+      if (newTimestampSeconds >= currentChapterLength) {
+        // We have reached the end of the current chapter.
 
-      // Check if this was the last chapter
-      if (currChapterIndex == state.audiobook.chapters.length) {
-        // Stop playback
-        playbackDelegator.stopAudiobook();
-        audiobookIsPlaying = false;
-      } else {
-        // Move to the next chapter
-        currChapterIndex++;
+        // Check if this was the last chapter
+        if (currChapterIndex == state.audiobook.chapters.length) {
+          // Stop playback
+          playbackDelegator.stopAudiobook();
+          audiobookIsPlaying = false;
+        } else {
+          // Move to the next chapter
+          currChapterIndex++;
 
-        //TODO: TRIGGER PLAYBACK OF NEW CHAPTER
+          //TODO: TRIGGER PLAYBACK OF NEW CHAPTER
+        }
       }
 
-
+      yield state.copyWith(currentPositionMillis: event.newTimestampMillis, audiobookIsPlaying: audiobookIsPlaying, currentChapter: currChapterIndex);
     }
-
-
-
-    yield state.copyWith(currentPositionMillis: event.newTimestampMillis, audiobookIsPlaying: audiobookIsPlaying, currentChapter: currChapterIndex);
   }
 
 }
